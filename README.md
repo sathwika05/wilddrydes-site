@@ -74,7 +74,6 @@ Modifying this line
 
 ### Create Cognito User Pool
 
- ![Step 10](images-1/10.png)
 
 1. Go to AWS Cognito and create a new user pool.
    ![Step 11](images-1/11.png)
@@ -105,21 +104,19 @@ Modifying this line
 3. We can click on the domain url and click on GIDDY UP!
    ![Step 19](images-1/19.png)
    
-5. It navigates to the registration page
+4. It navigates to the registration page. Give the details and click on LET’S RYDE
    ![Step 20](images-1/20.png)
-
-6. Give the details and click on LET’S RYDE
-    ![Step 21](images-1/21.png)
    
-7. Verify the email address
+5. Verify the email address
+   ![Step 21](images-1/21.png)
+ 
+6. Login after verification
    ![Step 22](images-1/22.png)
-
-8. Login after verification
-    ![Step 23](images-1/23.png)
+  
    
-9. The page is not the desired one. Just copy the token in if you'd like to test the Amazon Cognito user pool authorizer for your API, use the auth token below:
-    
-    ![Step 24](images-1/24.png)
+7. The page is not the desired one. Just copy the token in if you'd like to test the Amazon Cognito user pool authorizer for your API, use the auth token below:
+     ![Step 23](images-1/23.png)
+
 
 ---
 
@@ -139,53 +136,60 @@ Response to Frontend: Finally, the Lambda function responds to the frontend with
 ### Set Up DynamoDB Table
 
 1. Go to the DynamoDB console and create a new table.
-   ![Step 25](images-1/25.png)
+   ![Step 24](images-1/24.png)
+  
 
 2. Set the table name (e.g., `Rides`) and use `RideId` as the Partition key. Leave other settings as default and create the table.
-   ![Step 26](images-1/26.png)
+   ![Step 25](images-1/25.png)
+  
 
-3. Table will be created. 
-   ![Step 27](images-1/27.png)
+3. Table will be created.
+   ![Step 26](images-1/26.png)
+   
 
 4. Once the table is created, click on it to open its details page. From there, copy the ARN, which can be found under the 'Additional Information' section.
-   ![Step 28](images-1/28.png)
+   ![Step 27](images-1/27.png)
+   
 
 ### Create IAM Role
 
 Next, we need to create an execution role that allows the Lambda function to write to the DynamoDB table. Follow these steps:
 
 1. Navigate to the IAM console and click on Create role.
-![Step 29](images-1/29.png)
+![Step 28](images-1/28.png)
+
 
 2. For the trusted entity, select AWS service, and under Use case, choose Lambda.
-![Step 30](images-1/30.png)
+![Step 29](images-1/29.png)
 
 3. In the next screen, select the AWSLambdaBasicExecutionRole policy, then click Next.
-![Step 31](images-1/31.png)
+![Step 30](images-1/30.png)
 
 4. Enter a name for the role, scroll down, and click Create role to finalize the creation.
-![Step 32](images-1/32.png)
+![Step 31](images-1/31.png)
 
 5. The role is now created. Click on the newly created role to open its details page.
-![Step 33](images-1/33.png)
+![Step 32](images-1/32.png)
 
 6. To add additional permissions, click on Add inline policy on the right side of the page.
-![Step 34](images-1/34.png)
+![Step 32](images-1/32.png)
+
 
 7. Select DynamoDB as the service, then filter the actions to include PutItem (for inserting items into the table). You’ll need to specify the table that the Lambda function will access. Use the ARN (Amazon Resource Name) that was copied earlier when you created the DynamoDB table. Click Add ARN to include the specific ARN for your table.
-![Step 35](images-1/35.png)
+![Step 34](images-1/34.png)
 
 8. Click Next, then give the policy a name (e.g., LambdaDynamoDBPolicy), and click Create policy.
-![Step 36](images-1/36.png)
+![Step 35](images-1/35.png)
 
 9. The role now has the necessary permissions to allow the Lambda function to write to the DynamoDB table.
-![Step 37](images-1/37.png)
+![Step 36](images-1/36.png)
+
 
 
 ### Create Lambda Function
 
 1. Create a new Lambda function from scratch, provide a name, select the runtime environment, and assign the previously created execution role (WildRydesLambda), then click Create function.
-   ![Step 38](images-1/38.png)
+   ![Step 37](images-1/37.png)
 
 2. Paste the following code into the Lambda function:
 
@@ -276,6 +280,7 @@ function errorResponse(errorMessage, awsRequestId) {
 }
 
 ```
+![Step 38](images-1/38.png)
  ![Step 39](images-1/39.png)
 
  3. Update the DynamoDB table name in the Lambda function code to match the name of your created table.
