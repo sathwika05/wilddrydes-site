@@ -287,8 +287,7 @@ function errorResponse(errorMessage, awsRequestId) {
  ![Step 39](images-1/39.png)
 
  4. Then deploy it.
- ![Step 40](images-1/40.png)
- ![Step 41](images-1/41.png)
+
 
 ### Test Lambda and DynamoDB Integration
 1. First, create a test event to verify that the Lambda function works as expected. In the Lambda console, click on Test and choose Configure test event.
@@ -314,18 +313,19 @@ Then, copy and paste the following JSON code into the Event JSON field:
     "body": "{\"PickupLocation\":{\"Latitude\":47.6174755835663,\"Longitude\":-122.28837066650185}}"
 }
 ```
-Save the test event.
-
- ![Step 42](images-1/42.png)
+Save the test event. 
  
 2. After saving the test event, click on Test to execute the test. Select the test event you just created and click Test again.
-![Step 43](images-1/43.png)
 
 3. You should receive a response. If the response status is 201 Created, it means the function is working as expected.
- ![Step 44](images-1/44.png)
+ ![Step 40](images-1/40.png)
 
-4. Now, you can check your DynamoDB table to confirm that the entry has been successfully added.
- ![Step 45](images-1/45.png)
+5. Now, you can check your DynamoDB table to confirm that the entry has been successfully added.
+![Step 41](images-1/41.png)
+![Step 42](images-1/42.png)
+![Step 43](images-1/43.png)
+![Step 44](images-1/44.png)
+![Step 45](images-1/45.png)
 
 ## API Gateway Integration
 
