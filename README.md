@@ -325,85 +325,85 @@ Save the test event.
 
 ### Create API Gateway
 1. In the API Gateway console, click Create API.
-   [Step 46](images-1/46.png)
+   ![Step 46](images-1/46.png)
    
 2. Select REST API (not WebSocket) and click Build.
-   [Step 47](images-1/47.png)
+   ![Step 47](images-1/47.png)
    
 3. Provide a name for the API (e.g., WildRydesAPI) and click Create API to proceed.
-   [Step 48](images-1/48.png)
+   ![Step 48](images-1/48.png)
    
 
 ### Configure API Gateway Authorizer
 
 1. Since we are using Amazon Cognito User Pool for authentication, we need to set up an authorizer in API Gateway. Navigate to Authorizers under your newly created API and click Create New Authorizer.
- [Step 49](images-1/49.png)
+ ![Step 49](images-1/49.png)
 
 2. Configure the Authorizer:
 
 Provide a name for the authorizer (e.g., CognitoAuthorizer).
 Select your Cognito User Pool and set the Token source as Authorization (the name of the HTTP header containing the authorization token).
 Click Create to finish setting up the authorizer.
-  [Step 50](images-1/50.png)
-  [Step 51](images-1/51.png)
+  ![Step 50](images-1/50.png)
+  ![Step 51](images-1/51.png)
 
 3. You can test the authorizer functionality here. Paste the token (the Authorization token you obtained earlier) into the field, then click Test Authorizer.
-  [Step 52](images-1/52.png)
-  [Step 53](images-1/53.png)
-  [Step 54](images-1/54.png)
+  ![Step 52](images-1/52.png)
+  ![Step 53](images-1/53.png)
+  ![Step 54](images-1/54.png)
 
 4. If the authorizer is working correctly, you will receive a status code 200. This confirms that the token is valid, and the authorization is successful.
-    [Step 55](images-1/55.png)
+    ![Step 55](images-1/55.png)
 
 ### Create Resource and Method
 
 1. Go to the Resources section of the API and click Create Resource. This is where we will connect the Lambda function to the API.
-   [Step 56](images-1/56.png)
+   ![Step 56](images-1/56.png)
 
 2. In the Create Resource screen, set the Resource Path as / (or another path that suits your app). Enable CORS to allow cross-origin requests.
-   [Step 57](images-1/57.png)
+   ![Step 57](images-1/57.png)
 
 3. Click Create Method below the newly created resource.
-   [Step 58](images-1/58.png)
+   ![Step 58](images-1/58.png)
 
 4. Choose POST as the method type, select Lambda Function as the integration type, and enable Lambda Proxy Integration. Then, select the Lambda function that should be invoked.
-    [Step 59](images-1/59.png)
+    ![Step 59](images-1/59.png)
 
 5. Under the Method Request tab, click Edit to configure authorization settings.
-   [Step 60](images-1/60.png)
+   ![Step 60](images-1/60.png)
 
 6. In the Authorization section, enter the Authorization name that corresponds to the Cognito authorizer you created earlier. Then click Save to apply the changes.
-   [Step 61](images-1/61.png)
+   ![Step 61](images-1/61.png)
 
 7. Now, we need to deploy the API. Click Actions at the top and select Deploy API.
-    [Step 62](images-1/62.png)
+    ![Step 62](images-1/62.png)
 
 8. In the deployment dialog, select New Stage and give it a name, such as dev. Then click Deploy to finalize the deployment process.
-   [Step 63](images-1/63.png)
+   ![Step 63](images-1/63.png)
 
 9. After deployment, you will be provided with an Invoke URL. Copy the URL, which will look something like this:
 https://9ctfga027g.execute-api.us-east-1.amazonaws.com/dev. This URL will be used to call your API.
 
- [Step 64](images-1/64.png)
+ ![Step 64](images-1/64.png)
 
 
 
 ## Test the Ride Functionality
 
 1. Now, we need to update the GitHub config file to use the Invoke URL of the deployed API. Navigate to the relevant configuration file (e.g., config.js) in your repository and replace with the new Invoke URL. After making the change, commit the updates.
- [Step 65](images-1/65.png)
+ ![Step 65](images-1/65.png)
 
 2. Committing the changes to GitHub will automatically trigger a new deployment in AWS Amplify.
 
 3. Once the deployment is complete, you can test the ride functionality by visiting the ride.html page. You can access it at the following URL:
 https://main.d1nyxcl6lm6mxn.amplifyapp.com/ride.html.
-  [Step 66](images-1/66.png)
+  ![Step 66](images-1/66.png)
 
 4. On the ride.html page, simply click the button to Request a Unicorn.
-    [Step 67](images-1/67.png)
+    ![Step 67](images-1/67.png)
    
 5. After you click Request Unicorn, the unicorn will be dispatched to the requested location.
-    [Step 68](images-1/68.png)
+    ![Step 68](images-1/68.png)
 
 6. Finally, check the DynamoDB table to ensure that the ride request has been recorded. You should see a new entry for the ride request.
 
