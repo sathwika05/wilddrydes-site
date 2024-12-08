@@ -281,12 +281,13 @@ function errorResponse(errorMessage, awsRequestId) {
 
 ```
 ![Step 38](images-1/38.png)
- ![Step 39](images-1/39.png)
+
 
  3. Update the DynamoDB table name in the Lambda function code to match the name of your created table.
- ![Step 40](images-1/40.png)
+ ![Step 39](images-1/39.png)
 
  4. Then deploy it.
+ ![Step 40](images-1/40.png)
  ![Step 41](images-1/41.png)
 
 ### Test Lambda and DynamoDB Integration
