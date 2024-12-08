@@ -319,37 +319,40 @@ Save the test event.
 
 3. You should receive a response. If the response status is 201 Created, it means the function is working as expected.
  ![Step 40](images-1/40.png)
+ ![Step 41](images-1/41.png)
 
 5. Now, you can check your DynamoDB table to confirm that the entry has been successfully added.
-![Step 41](images-1/41.png)
 ![Step 42](images-1/42.png)
-![Step 43](images-1/43.png)
-![Step 44](images-1/44.png)
-![Step 45](images-1/45.png)
+
 
 ## API Gateway Integration
 
 ### Create API Gateway
 1. In the API Gateway console, click Create API.
-   ![Step 46](images-1/46.png)
-   
+   ![Step 43](images-1/43.png)
+     
 2. Select REST API (not WebSocket) and click Build.
-   ![Step 47](images-1/47.png)
+    ![Step 44](images-1/44.png)
    
 3. Provide a name for the API (e.g., WildRydesAPI) and click Create API to proceed.
-   ![Step 48](images-1/48.png)
+   ![Step 45](images-1/45.png)
+  
    
 
 ### Configure API Gateway Authorizer
 
 1. Since we are using Amazon Cognito User Pool for authentication, we need to set up an authorizer in API Gateway. Navigate to Authorizers under your newly created API and click Create New Authorizer.
- ![Step 49](images-1/49.png)
+![Step 46](images-1/46.png)
 
-2. Configure the Authorizer:
+
+3. Configure the Authorizer:
 
 Provide a name for the authorizer (e.g., CognitoAuthorizer).
 Select your Cognito User Pool and set the Token source as Authorization (the name of the HTTP header containing the authorization token).
 Click Create to finish setting up the authorizer.
+  ![Step 47](images-1/47.png)
+![Step 48](images-1/48.png)
+![Step 49](images-1/49.png)
   ![Step 50](images-1/50.png)
   ![Step 51](images-1/51.png)
 
