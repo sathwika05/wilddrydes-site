@@ -13,13 +13,14 @@ WildRydes is a fun, fictional ride-sharing application built using AWS services 
    - [Update GitHub Repo with Cognito IDs](#update-github-repo-with-cognito-ids)
 3. [Ride Request Functionality](#ride-request-functionality)
    - [Set Up DynamoDB Table](#set-up-dynamodb-table)
+   - [Create IAM Role](#create-iam-role)
    - [Create Lambda Function](#create-lambda-function)
-   -  [Create IAM Role](#create-iam-role)
    - [Test Lambda and DynamoDB Integration](#test-lambda-and-dynamodb-integration)
 4. [API Gateway Integration](#api-gateway-integration)
    - [Create API Gateway](#create-api-gateway)
    - [Configure API Gateway Authorizer](#configure-api-gateway-authorizer)
-5. [Deployment and Testing](#deployment-and-testing)
+   - [Create Resource and Method](#create-resource)
+5. [Test the Ride Functionality](#test-the-ride-functionality)
 6. [Conclusion](#conclusion)
 
 ---
@@ -183,15 +184,12 @@ Next, we need to create an execution role that allows the Lambda function to wri
 
 ### Create Lambda Function
 
-1. Create a new Lambda function from scratch.
-   ![Step 18](images/18.png)
+1. Create a new Lambda function from scratch, provide a name, select the runtime environment, and assign the previously created execution role (WildRydesLambda), then click Create function.
+   ![Step 38](images/38.png)
 
-2. Select the runtime environment and set the execution role to the role you created earlier (e.g., `WildRydesLambda`).
-   ![Step 19](images/19.png)
+2. Paste the following code into the Lambda function:
 
-3. Paste the following code into the Lambda function:
-
-```javascript
+```
 import { randomBytes } from 'crypto';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
@@ -276,3 +274,143 @@ function errorResponse(errorMessage, awsRequestId) {
         },
     };
 }
+
+```
+ ![Step 39](images/39.png)
+
+ 3. Update the DynamoDB table name in the Lambda function code to match the name of your created table.
+ ![Step 40](images/40.png)
+
+ 4. Then deploy it.
+ ![Step 41](images/41.png)
+
+### Test Lambda and DynamoDB Integration
+1. First, create a test event to verify that the Lambda function works as expected. In the Lambda console, click on Test and choose Configure test event.
+Then, copy and paste the following JSON code into the Event JSON field:
+```
+{
+    "path": "/ride",
+    "httpMethod": "POST",
+    "headers": {
+        "Accept": "*/*",
+        "Authorization": "eyJraWQiOiJLTzRVMWZs",
+        "content-type": "application/json; charset=UTF-8"
+    },
+    "queryStringParameters": null,
+    "pathParameters": null,
+    "requestContext": {
+        "authorizer": {
+            "claims": {
+                "cognito:username": "the_username"
+            }
+        }
+    },
+    "body": "{\"PickupLocation\":{\"Latitude\":47.6174755835663,\"Longitude\":-122.28837066650185}}"
+}
+```
+Save the test event.
+
+ ![Step 42](images/42.png)
+ 
+2. After saving the test event, click on Test to execute the test. Select the test event you just created and click Test again.
+![Step 43](images/43.png)
+
+3. You should receive a response. If the response status is 201 Created, it means the function is working as expected.
+ ![Step 44](images/44.png)
+
+4. Now, you can check your DynamoDB table to confirm that the entry has been successfully added.
+ ![Step 45](images/45.png)
+
+## API Gateway Integration
+
+### Create API Gateway
+1. In the API Gateway console, click Create API.
+   [Step 46](images/46.png)
+   
+2. Select REST API (not WebSocket) and click Build.
+   [Step 47](images/47.png)
+   
+3. Provide a name for the API (e.g., WildRydesAPI) and click Create API to proceed.
+   [Step 48](images/48.png)
+   
+
+### Configure API Gateway Authorizer
+
+1. Since we are using Amazon Cognito User Pool for authentication, we need to set up an authorizer in API Gateway. Navigate to Authorizers under your newly created API and click Create New Authorizer.
+ [Step 49](images/49.png)
+
+2. Configure the Authorizer:
+
+Provide a name for the authorizer (e.g., CognitoAuthorizer).
+Select your Cognito User Pool and set the Token source as Authorization (the name of the HTTP header containing the authorization token).
+Click Create to finish setting up the authorizer.
+  [Step 50](images/50.png)
+  [Step 51](images/51.png)
+
+3. You can test the authorizer functionality here. Paste the token (the Authorization token you obtained earlier) into the field, then click Test Authorizer.
+  [Step 52](images/52.png)
+  [Step 53](images/53.png)
+  [Step 54](images/54.png)
+
+4. If the authorizer is working correctly, you will receive a status code 200. This confirms that the token is valid, and the authorization is successful.
+    [Step 55](images/55.png)
+
+### Create Resource and Method
+
+1. Go to the Resources section of the API and click Create Resource. This is where we will connect the Lambda function to the API.
+   [Step 56](images/56.png)
+
+2. In the Create Resource screen, set the Resource Path as / (or another path that suits your app). Enable CORS to allow cross-origin requests.
+   [Step 57](images/57.png)
+
+3. Click Create Method below the newly created resource.
+   [Step 58](images/58.png)
+
+4. Choose POST as the method type, select Lambda Function as the integration type, and enable Lambda Proxy Integration. Then, select the Lambda function that should be invoked.
+    [Step 59](images/59.png)
+
+5. Under the Method Request tab, click Edit to configure authorization settings.
+   [Step 60](images/60.png)
+
+6. In the Authorization section, enter the Authorization name that corresponds to the Cognito authorizer you created earlier. Then click Save to apply the changes.
+   [Step 61](images/61.png)
+
+7. Now, we need to deploy the API. Click Actions at the top and select Deploy API.
+    [Step 62](images/62.png)
+
+8. In the deployment dialog, select New Stage and give it a name, such as dev. Then click Deploy to finalize the deployment process.
+   [Step 63](images/63.png)
+
+9. After deployment, you will be provided with an Invoke URL. Copy the URL, which will look something like this:
+https://9ctfga027g.execute-api.us-east-1.amazonaws.com/dev. This URL will be used to call your API.
+
+ [Step 64](images/64.png)
+
+
+
+## Test the Ride Functionality
+
+1. Now, we need to update the GitHub config file to use the Invoke URL of the deployed API. Navigate to the relevant configuration file (e.g., config.js) in your repository and replace with the new Invoke URL. After making the change, commit the updates.
+ [Step 65](images/65.png)
+
+2. Committing the changes to GitHub will automatically trigger a new deployment in AWS Amplify.
+
+3. Once the deployment is complete, you can test the ride functionality by visiting the ride.html page. You can access it at the following URL:
+https://main.d1nyxcl6lm6mxn.amplifyapp.com/ride.html.
+  [Step 66](images/66.png)
+
+4. On the ride.html page, simply click the button to Request a Unicorn.
+    [Step 67](images/67.png)
+   
+5. After you click Request Unicorn, the unicorn will be dispatched to the requested location.
+    [Step 68](images/68.png)
+
+6. Finally, check the DynamoDB table to ensure that the ride request has been recorded. You should see a new entry for the ride request.
+
+
+## Conclusion
+
+In this project, we successfully built a serverless ride-sharing app, WildRydes, using AWS services like Cognito for authentication, Lambda for backend logic, DynamoDB for data storage, and API Gateway for API management. We integrated these services to create a seamless user experience for requesting unicorn rides. The app is fully functional, scalable, and continuously deployed via AWS Amplify. This project demonstrates the power of AWS in building efficient, serverless applications.
+
+
+ 
