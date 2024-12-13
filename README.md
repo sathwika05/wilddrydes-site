@@ -2,6 +2,9 @@
 
 WildRydes is a fun, fictional ride-sharing application built using AWS services such as Cognito for authentication, Lambda for backend logic, DynamoDB for storage, and API Gateway for API management. This project demonstrates how to integrate these services for a seamless ride-request flow where users can register, log in, and request unicorn rides.
 
+ ![cloud architecture](images-1/cloud-architecture.png)
+
+ 
 ---
 
 ## Table of Contents
